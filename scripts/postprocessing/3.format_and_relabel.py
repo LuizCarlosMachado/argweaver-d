@@ -40,13 +40,13 @@ def relabel_newick(newick):
 
 # Process each directory
 for dir_path in directories:
-    print(f"📂 Processing directory: {dir_path}")
+    print(f"Processing directory: {dir_path}")
 
     for file_name in os.listdir(dir_path):
         if file_name.endswith(".newick"):
             file_path = os.path.join(dir_path, file_name)
 
-            print(f"🛠️  Processing {file_path}")
+            print(f"Processing {file_path}")
 
             with open(file_path, "r") as file:
                 lines = file.readlines()
@@ -65,5 +65,5 @@ for dir_path in directories:
 
             print(f" File saved: {output_file_path}")
 
-print("🎯 All trees have been processed and corrected!")
+print("All trees have been processed and corrected!")
 

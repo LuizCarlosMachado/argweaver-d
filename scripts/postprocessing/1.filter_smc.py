@@ -46,7 +46,7 @@ for filename in os.listdir(input_dir):
                     output_path = os.path.join(positions[pos], filename)
                     with gzip.open(output_path, 'wt') as outfile:
                         outfile.writelines(lines)
-                    print(f"✅ Filtered file saved: {output_path} with {len(lines) - 2} trees")
+                    print(f"Filtered file saved: {output_path} with {len(lines) - 2} trees")
                 else:
                     print(f"⚠️ No relevant trees found for position {pos} in {filename}, file ignored.")
 
