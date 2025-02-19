@@ -7,8 +7,8 @@ This pipeline allows users to:
 
 - Isolate trees corresponding to specific genomic positions.
 - Remove unnecessary metadata.
-- Relabel nodes with meaningful sample names, ensuring interpretability and reproducibility.
-
+- Relabel nodes with meaningful sample names.
+  
 ## Requirements
 
 Before running the scripts, ensure that you have:
@@ -33,9 +33,9 @@ Before running the scripts, ensure that you have:
 2. **Ensure ************************************************`positions.txt`************************************************ is in the working directory** with the positions you want to extract.
 3. **Run the post-processing scripts sequentially:**
    ```bash
-   python3 filter_smc.py
-   bash convert_smc_to_newick.sh
-   python3 format_and_relabel.py
+   python3 1.filter_smc.py
+   bash 2.convert_smc_to_newick.sh
+   python3 3.format_and_relabel.py
    ```
 
 ## Script Overview
