@@ -53,7 +53,7 @@ for dir_path in directories:
 
             tree_lines = [line for line in lines if line.startswith("TREE")]
             if not tree_lines:
-                print(f"⚠️  No tree found in {file_path}")
+                print(f" No tree found in {file_path}")
                 continue
 
             clean_newick = re.sub(r'^TREE\s+\d+\s+\d+\s+', '', tree_lines[0]).strip()
