@@ -1,4 +1,3 @@
-```markdown
 # Analysis of Highly Frequent Variants in Modern Humans and Their Absence in Ancient DNA
 
 ## **Overview**
