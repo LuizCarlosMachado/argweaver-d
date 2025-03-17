@@ -27,8 +27,8 @@ This analysis aims to identify genomic regions that are **highly frequent in mod
 ### **3. Merging Ancient VCFs**
 - Combined all ancient VCFs into a single file:
   ```bash
-  bcftools merge -m all -Oz -o ancient_merged.vcf.gz Altai_subset.vcf.gz Chagyrskaya_subset.vcf.gz Denisova_subset.vcf.gz Vindija_subset.vcf.gz
-  bcftools index ancient_merged.vcf.gz
+  bcftools merge -m all -Oz -o ancient_subset_merged.vcf.gz Altai_subset.vcf.gz Chagyrskaya_subset.vcf.gz Denisova_subset.vcf.gz Vindija_subset.vcf.gz
+  bcftools index ancient_subset_merged.vcf.gz
   ```
 
 ### **4. Extracting Genotypes**
