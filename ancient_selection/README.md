@@ -34,7 +34,7 @@ This analysis aims to identify genomic regions that are **highly frequent in mod
 ### **4. Extracting Genotypes**
 - Removed all additional fields, keeping only genotype (`GT`) data:
   ```bash
-  bcftools query -f '%CHROM\t%POS[\t%GT]\n' ancient_merged.vcf.gz > ancient_merged_genotypes.tsv
+  bcftools query -f '%CHROM\t%POS[\t%GT]\n' ancient_subset_merged.vcf.gz > ancient_merged_genotypes.tsv
   ```
 
 ### **5. Analyzing Genotype Combinations**
