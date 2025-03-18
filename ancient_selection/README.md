@@ -1,7 +1,3 @@
-Aqui está o **README** estruturado e traduzido para inglês. Ele mantém a clareza do processo e os comentários organizados para fácil consulta.
-
----
-
 ## **Identifying High-Frequency Variants in Modern Humans and Their Absence in Archaic Genomes**
 
 ### **Objective**
@@ -117,6 +113,3 @@ This final merged VCF (`final_merged_1_1_modern_0_0_ancient.vcf.gz`) contains on
 This pipeline successfully identifies genomic positions where:
 - **Modern humans (1000 Genomes Project) are fixed for the alternate allele (1/1)**.
 - **Archaic genomes (Neanderthals and Denisovans) are fixed for the reference allele (0/0)**.
-
-These variants are strong candidates for functional and evolutionary analysis, potentially linked to **human-specific adaptations and selection**.
-  ```
