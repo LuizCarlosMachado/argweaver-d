@@ -15,13 +15,14 @@ Before running the scripts, ensure that you have:
 
 - **Python 3** installed on your system.
 - A file named **`positions.txt`**, listing the chr and genomic positions of interest (one per line). Example:
-  ```
+
+```
 2       35072772
 2       35385475
 2       35387871
 2       35387961
 2       35388360
-  ```
+```
 
 ## How to Use
 
