@@ -33,7 +33,7 @@ Before running the scripts, ensure that you have:
 2. **Ensure ************************************************`positions.txt`************************************************ is in the working directory** with the positions you want to extract.
 3. **Run the post-processing scripts sequentially:**
    ```bash
-   python3 filter_smc.py chr${i}_positions.txt --min_iter 1500 # (Optional: filters out trees from iterations 0 to 1499)
+   python3 filter_smc.py chr*_all.txt --min_iter 1500 # (Optional: filters out trees from iterations 0 to 1499)
    bash 2.convert_smc_to_newick.sh
    python3 3.format_and_relabel.py
    ```
