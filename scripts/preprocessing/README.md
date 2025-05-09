@@ -1,104 +1,75 @@
-# Generating ARGweaver-compatible .sites files from merged VCFs
+# Converting VCFs to `.sites` Files
 
-This document describes the rationale, preprocessing steps, and the unified Python script used to convert merged VCF files (containing modern and ancient genomes) into `.sites` format compatible with ARGweaver. The approach ensures proper handling of genotypes, phasing, and invariant site filtering.
-
----
-
-## Context
-
-When preparing data for ancestral recombination graph (ARG) inference using ARGweaver, it is often necessary to merge phased VCFs from modern populations (e.g., 1000 Genomes Project) with pseudo-haploid or unphased VCFs from ancient genomes (e.g., Neanderthals, Denisovans). These merged datasets present unique challenges:
-
-- Ancient VCFs may lack standard `ALT` fields.
-- Modern VCFs contain only variant sites, while ancient VCFs often represent dense genomic sequences.
-- Ancient genotypes are typically unphased, while modern ones are phased.
-
-To standardize and densify the merged VCF, we generate a `.sites` file with:
-
-- All informative positions represented;
-- Correct haplotype encoding per individual;
-- Optional exclusion of non-human outgroups (e.g., panTro4);
-- Filtering of invariant sites to reduce file size and focus inference on polymorphic regions.
+The script (`vcf2sites.py`) converts phased and unphased VCFs into `.sites` format for use with ARGweaver and ARGweaver-D. It is designed for datasets that combine modern and ancient human genomes and assumes that all variants are **biallelic SNPs**.
 
 ---
 
-## Genotype Handling Logic
+## What the Script Does
 
-Each genotype (GT field) is parsed and translated into a pair of haplotype bases using the following rules:
+* Parses genotypes from a VCF or VCF.gz file.
+* Converts each sample’s genotype into a haplotype sequence.
+* Assigns:
 
-| Genotype   | Meaning                 | Haplotype Output |          |
-| ---------- | ----------------------- | ---------------- | -------- |
-| 0/0 or 0   | 0                       | Homozygous REF   | REF, REF |
-| 1/1 or 1   | 1                       | Homozygous ALT   | ALT, ALT |
-| 0/1 or 1/0 | Heterozygous (unphased) | N, N             |          |
-| ./., .     | Missing                 | N, N             |          |
+  * `REF/REF` → two reference alleles (e.g., "AA")
+  * `ALT/ALT` → two alternate alleles (e.g., "GG")
+  * Heterozygotes or unphased → `"NN"`
+  * Missing genotypes (`./.`) → `"NN"`
+* Keeps only one line per position (removes duplicates).
+* Filters out invariant sites (positions where all haplotypes are identical).
+* Outputs a `.sites` file in the format required by ARGweaver.
 
-- All phasing symbols (`|`) are treated the same as `/` for consistency.
-- Only the first two fields of each genotype are used.
-- Non-numeric or out-of-range allele indices are mapped to `N`.
-- ALT alleles are extracted only if present; otherwise, only REF is used.
 
----
+### Note on Heterozygotes and Phasing
 
-## Script Behavior
-
-The Python script performs the following steps:
-
-1. Reads the input `.vcf` or `.vcf.gz` file within a given chromosome window.
-2. Converts each genotype into two haplotypes.
-3. Constructs `.sites` lines with the position and the concatenated haplotypes.
-4. Removes invariant sites (where all haplotypes have the same base).
-5. Writes the output to a `.sites` file.
-
-The script also supports an optional `--exclude-last` flag to remove the last individual (commonly used for outgroups like panTro4) from the analysis.
+Although phased genotypes (such as 0|1) can indicate specific haplotypes, this script converts all heterozygous genotypes to "NN", regardless of phasing status. This is intentional. Since we work with mixed data — modern genomes (typically phased) and archaic genomes (typically unphased) — we chose a uniform approach to avoid introducing bias into the inference process. However, this behavior can be adjusted depending on the specific characteristics of your dataset.
 
 ---
 
 ## Usage
 
 ```bash
-python3 vcf2filtered_sites.py input.vcf.gz output_prefix chrom start end [--exclude-last]
+python3 vcf2sites.py input.vcf.gz output_prefix [chrom start end]
 ```
 
-### Example
+### Examples
+
+**Full genome (no region filtering):**
 
 ```bash
-python3 vcf2filtered_sites.py merged_chr22.vcf.gz chr22_sites 22 19000000 20000000 --exclude-last
+python3 vcf2sites.py merged.vcf.gz chr22_sites
+```
+
+**Specific window (e.g., chr22:100000–200000):**
+
+```bash
+python3 vcf2sites.py merged.vcf.gz chr22_sites 22 100000 200000
 ```
 
 ---
 
 ## Output
 
-The final output is a valid `.sites` file with the following structure:
+A `.sites` file with the following structure:
 
-```text
-NAMES   sample1_1   sample1_2   ...
-REGION  22  19000000    20000000
-19173496    CCCCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+```
+NAMES   sample1_1 sample1_2 sample2_1 ...
+REGION  22  100000  200000
+101238  AAGG...
 ...
 ```
 
-Only variant positions are retained after internal filtering.
-
----
-
-## Script Location
-
-The full script is available in the `script/` directory under the name:
-
-```
-vcf2filtered_sites.py
-```
-
-It is self-contained, and no external libraries beyond Python's standard library are required.
+Each row represents a **biallelic SNP**, with haplotypes for each sample.
 
 ---
 
 ## Notes
 
-- This pipeline assumes that merged VCFs have been harmonized in terms of REF/ALT alleles and contain no structural variants.
-- For ancient genomes with missing genotypes (`./.`), the script assigns `N` to both haplotypes.
-- Invariant positions are filtered **after** translation into haplotypes, to ensure accuracy even in the presence of missing data.
+* Designed specifically for **biallelic SNPs only**. Multiallelic or indel variants should be filtered out beforehand (e.g., with `bcftools view -m2 -M2 -v snps`).
+* The script ignores genotype phasing symbols (`/` vs `|`).
+* Missing and heterozygous calls are encoded as `"NN"` to reflect uncertainty.
 
-For questions or improvements, please submit an issue or pull request.
+---
+
+
+
 
