@@ -12,7 +12,7 @@ The script (`vcf2sites.py`) converts phased and unphased VCFs into `.sites` form
 
   * `REF/REF` → two reference alleles (e.g., "AA")
   * `ALT/ALT` → two alternate alleles (e.g., "GG")
-  * Heterozygotes or unphased → `"NN"`
+  * 0/1, 1/0 Heterozygous → AG (e.g.)
   * Missing genotypes (`./.`) → `"NN"`
 * Keeps only one line per position (removes duplicates).
 * Filters out invariant sites (positions where all haplotypes are identical).
