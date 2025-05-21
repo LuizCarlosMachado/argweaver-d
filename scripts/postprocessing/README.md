@@ -37,7 +37,7 @@ It is particularly useful for downstream analyses requiring correct sample label
 From within the directory containing your `.smc.gz` files, run:
 
 ```bash
-python3 direct_relabel.py positions.txt --min_iter 1500
+python3 extract_local_trees.py positions.txt --min_iter 1500
 ```
 
 This will:
